@@ -20,7 +20,7 @@ contract Dao is AccessControl{
         mapping(address=>bool) voteOrNot;
     }
     struct Voter{
-       // uint256 latestProposalId;
+       
         uint256 votes;
         uint256 time;  // the latest startTime 
     }
@@ -99,7 +99,7 @@ contract Dao is AccessControl{
         require(proposals[id].proposalOver==false,"proposal already over");
         proposals[id].proposalOver=true;
         
-        if(proposals[id].yesCounter>=proposals[id].noCounter){
+        if(proposals[id].yesCounter>proposals[id].noCounter){
             proposals[id].whichContract.call(proposals[id].data);
             // (bool success, ) =(proposals[id].whichContract).call(
             //        proposals[id].data

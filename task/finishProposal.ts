@@ -3,7 +3,7 @@ import "@nomiclabs/hardhat-waffle";
 import { parseEther } from "ethers/lib/utils";
 
 
-task("addProposal", "addProposal on dao")
+task("finishProposal", "addProposal on dao")
     .addParam("data", "amount to vote")
     .addParam("addr", "address for selector")
     .addParam("description", "description of proposal")

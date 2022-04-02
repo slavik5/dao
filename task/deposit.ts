@@ -14,9 +14,10 @@ task("deposit", "deposit tokens")
         const dao = await hre.ethers.getContractAt("Dao", process.env.Dao_CONTRACT as string);
         
         
-        await token.mint(taskArgs.account,taskArgs.amount);
-        await token.connect(addr[taskArgs.account]).approve(dao.address, taskArgs.amount);
-        await dao.connect(addr[taskArgs.account]).deposit(taskArgs.amount);
+        // await token.mint(taskArgs.account,parseEther(taskArgs.amount));
+        // await token.connect(addr[taskArgs.account]).approve(dao.address, parseEther(taskArgs.amount));
+        // await token.mint(dao.address,parseEther("1000"))
+        await dao.connect(addr[taskArgs.account]).deposit(parseEther(taskArgs.amount));
         console.log('deposit task Done!');
 
     });

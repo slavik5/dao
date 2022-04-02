@@ -11,7 +11,11 @@ task("addProposal", "addProposal on dao")
         
         const token = await hre.ethers.getContractAt("Token", process.env.Token_CONTRACT as string);
         const dao = await hre.ethers.getContractAt("Dao", process.env.Dao_CONTRACT as string);
-        await dao.addProposal(taskArgs.data,taskArgs.account,taskArgs.description)
+        const abi =["function transfer(address to, uint256 amount)"]   
+        const inter=new hre.ethers.utils.Interface(abi)
+        const callData=inter.encodeFunctionData("transfer",[addr[1].address,100])
+        
+        await dao.addProposal(callData,taskArgs.account,taskArgs.description)
         console.log('addProposal task Done!');
 
     });

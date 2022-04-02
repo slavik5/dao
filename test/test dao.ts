@@ -134,12 +134,45 @@ describe("Dao contract", function () {
         await dao.connect(addr[2]).deposit(10)
 
         await token.mint(addr[3].address,10);
-        await token.connect(addr[3]).approve(dao.address, 20);
+        await token.connect(addr[3]).approve(dao.address, 30);
         await dao.connect(addr[3]).deposit(10)
 
         await token.mint(addr[4].address,10);
-        await token.connect(addr[4]).approve(dao.address, 20);
+        await token.connect(addr[4]).approve(dao.address, 40);
         await dao.connect(addr[4]).deposit(10)
+        await token.mint(dao.address,100);
+        const abi =["function transfer(address to, uint256 amount)"]   
+        const inter=new ethers.utils.Interface(abi)
+        const callData=inter.encodeFunctionData("transfer",[addr[5].address,100])
+        await dao.addProposal(callData,token.address,"transfer 100 tokens")
+        
+        await dao.connect(addr[1]).vote(0,true);
+        await dao.connect(addr[2]).vote(0,false);
+        await dao.connect(addr[3]).vote(0,false);
+        await dao.connect(addr[4]).vote(0,false);
+        
+        skipTime(610);
+        await dao.finishProposal(0)
+        expect(await token.balanceOf(addr[5].address)).to.equal(0);
+
+    });
+    it("finishProposal work right", async function () {
+        await token.mint(addr[1].address,10);
+        await token.connect(addr[1]).approve(dao.address, 10);
+        await dao.connect(addr[1]).deposit(10)
+
+        await token.mint(addr[2].address,10);
+        await token.connect(addr[2]).approve(dao.address, 20);
+        await dao.connect(addr[2]).deposit(10)
+
+        await token.mint(addr[3].address,10);
+        await token.connect(addr[3]).approve(dao.address, 30);
+        await dao.connect(addr[3]).deposit(10)
+
+        await token.mint(addr[4].address,10);
+        await token.connect(addr[4]).approve(dao.address, 40);
+        await dao.connect(addr[4]).deposit(10)
+        await token.mint(dao.address,100);
         const abi =["function transfer(address to, uint256 amount)"]   
         const inter=new ethers.utils.Interface(abi)
         const callData=inter.encodeFunctionData("transfer",[addr[5].address,100])
@@ -152,7 +185,7 @@ describe("Dao contract", function () {
         
         skipTime(610);
         await dao.finishProposal(0)
-        //expect(await token.balanceOf(addr[5].address)).to.equal(100);
+        expect(await token.balanceOf(addr[5].address)).to.equal(100);
 
     });
     it("not enough votes", async function () {

@@ -1,6 +1,6 @@
 import "@nomiclabs/hardhat-waffle";
 import "solidity-coverage"
-
+import "@nomiclabs/hardhat-etherscan";
 import * as dotenv from "dotenv";
 dotenv.config();
 import "./task/vote"
@@ -20,5 +20,8 @@ module.exports = {
         mnemonic: process.env.MNEMONIC,
       },
     }
+  },
+  etherscan: {
+    apiKey: process.env.ETHERSCAN,
   }
 };
